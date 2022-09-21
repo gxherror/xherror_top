@@ -14,7 +14,7 @@ languages:
         title: xherror的小站
         weight: 1
 
-#timeZone: Asia/Shanghai
+timeZone: Asia/Shanghai
 # Change it to your Disqus shortname before using
 disqusShortname: hugo-theme-stack
 enablegitinfo: true
