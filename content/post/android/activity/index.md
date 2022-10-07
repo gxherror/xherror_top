@@ -8,6 +8,7 @@ license:
 hidden: false
 comments: true
 categories:
+    - Android
 tags:
 ---
 ## 基本流程
