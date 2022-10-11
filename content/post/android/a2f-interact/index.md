@@ -2,7 +2,7 @@
 title: "Fragment，Activity，Adapter交互"
 description: 原创+转载
 date: 2022-10-07T12:08:51Z
-image: download.png
+image: Android_symbol_green_2.max-1500x1500.png
 math: 
 license: 
 hidden: false

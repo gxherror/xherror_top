@@ -25,7 +25,8 @@ tags:
 
 ### 需求分析
 
-- 允许添加物品的信息，删除物品的信息✓
+- 允许添加物品的信息✓
+- 删除物品的信息✓(还有BUG...)
 - 显示物品列表✓
 - 查找物品的信息✓
 - （附加）用户管理X
@@ -38,11 +39,12 @@ tags:
 ## 记录用时
 
 ```
-release:MutualHelper-v1.1N 		 --2022/10/7 19.46
-release:MutualHelper-v1.0  		 --2022/10/7 11:31
-TODO:load image        		     --2022/10/6 23:13
-TODO:upload image        	     --2022/10/6 0:24
-init                 	         --2022/10/5 20:01
+optimize code and enable camera --2022/10/11 15:53
+release:MutualHelper-v1.1N 		  --2022/10/7 19.46
+release:MutualHelper-v1.0  		  --2022/10/7 11:31
+TODO:load image        		      --2022/10/6 23:13
+TODO:upload image        	      --2022/10/6 0:24
+init                 	          --2022/10/5 20:01
 ```
 
 大致用时三天，在图片上传，储存，加载方面用时较久，在DEBUG方面也耗费较多时间
