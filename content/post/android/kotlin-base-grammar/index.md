@@ -1,5 +1,5 @@
 ---
-title: "Kotlin Base Grammar"
+title: "Kotlin基础语法"
 description: 
 date: 2022-09-29T01:29:41Z
 image: 
@@ -8,7 +8,7 @@ license:
 hidden: false
 comments: true
 categories:
-    - Android
+    - ANDROID
 tags:
 ---
 

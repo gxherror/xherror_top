@@ -1,4 +1,4 @@
-baseurl: http://www.xherror.top:1313/
+baseurl: http://www.xherror.top/
 languageCode: en-us
 theme: hugo-theme-stack
 paginate: 10
@@ -40,7 +40,7 @@ params:
         - post
     featuredImageField: image
     rssFullContent: true
-    favicon:
+    favicon: img/avatar.jpg
 
     footer:
         since: 2020
