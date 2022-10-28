@@ -1,8 +1,8 @@
 ---
-title: "Novelai"
-description: 
-date: 2022-10-22T13:02:05Z
-image: 
+title: "Novalai"
+description: 原创
+date: 2022-10-21T06:36:55Z
+image: novelai.png
 math: 
 license: 
 hidden: false
@@ -11,6 +11,7 @@ categories:
     - CV_ML
 tags:
 ---
+
 # 平台colab/kaggle
 
 - 都需要科学上网
@@ -92,7 +93,7 @@ os.kill(os.getpid(), 9)
 !git pull
 
 # 启动
-!COMMANDLINE_ARGS=" --share --disable-safe-unpickle -gradio-debug --gradio-auth me:qwerty" REQS_FILE="requirements.txt" python launch.py
+!COMMANDLINE_ARGS=" --share --disable-safe-unpickle --gradio-debug --gradio-auth me:qwerty" REQS_FILE="requirements.txt" python launch.py
 ```
 
 # 设置

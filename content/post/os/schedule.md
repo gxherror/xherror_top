@@ -63,18 +63,18 @@ tags:
   - 缺乏可扩展性（scalability）。为了保证在多CPU 上正常运行，需要加锁（locking）
   - 缺少缓存亲和度（cache affinity）
 
-![image-20221024202521679](/images/image-20221024202521679.png)
+
 ![image-20221024202521679](/images/image-20221024202521679.png)
 
 - 多队列多处理器调度（Multi-Queue Multiprocessor Scheduling，MQMS）
   - 使用迁移（migration）来确保公平性
 
-![image-20221024202534013](/images/image-20221024202534013.png)
+
 ![image-20221024202534013](/images/image-20221024202534013.png)
 
 ### CFS
 
-![img](/images/linux-schedule-arch.png)
+
 ![img](/images/linux-schedule-arch.png)
 
 - MQMS
@@ -88,7 +88,7 @@ tags:
 
 ### O(1)
 
-![img](/images/v2-729fb18fa3ac1e41beff0fcd817c92a6_720w.webp)
+
 ![img](/images/v2-729fb18fa3ac1e41beff0fcd817c92a6_720w.webp)
 
 
