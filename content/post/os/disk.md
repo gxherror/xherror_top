@@ -20,7 +20,7 @@ tags:
 - 磁道偏斜（track skew）:抵消seek time与rotate time
 - 后写（write back）缓存/（立即报告，immediate reporting）与直写（write through）
 - 平均磁盘寻道时间大约为完整寻道时间的三分之一
-  - ![image-20221026231538358](/images/image-20221026231538358.png)- >![image-20221026231615942](../../_resources/image-20221026231615942.png)
+  - ![image-20221026231538358](/images/image-20221026231538358.png)- >![image-20221026231615942](/images/image-20221026231615942.png)
 
 ## 磁盘驱动器(disk drive)
 

@@ -38,10 +38,10 @@ tags:
 系统流程图表达的是**数据在系统各部件之间流动的情况**，而不是对数 据进行加工处理的控制过程，因此尽管系统流程图的某些符号和程序流 程图的符号形式相同，但是它却是物理数据流图而不是程序流程图。
 
 ![image-20221002211027308.png](/images/image-20221002211027308.png)
-![image-20221002211027308.png](/images/image-20221002211027308.png)
+
 
 ![cea5f71a410522e94d3c2d861af3e2f3.png](/images/cea5f71a410522e94d3c2d861af3e2f3.png)
-![cea5f71a410522e94d3c2d861af3e2f3.png](/images/cea5f71a410522e94d3c2d861af3e2f3.png)
+
 
 ### 数据流图(DFD)
 
@@ -50,7 +50,7 @@ tags:
 数据流图(DFD)是一种图形化技术，它描绘**信息流**和**数据**从输入移动到输出的过程中所经受的变换
 
 ![image-20221002211156385.png](/images/image-20221002211156385.png)
-![image-20221002211156385.png](/images/image-20221002211156385.png)
+
 
 ### 例子
 
@@ -63,10 +63,10 @@ tags:
 - 零件入库或出库称为事务，通过放在仓库中的终端把事务报告给订货 系统。当某种零件的库存数量少于库存量临界值时就应该再次订货
 
 ![image-20221002211857598.png](/images/image-20221002211857598.png)
-![image-20221002211857598.png](/images/image-20221002211857598.png)
+
 
 <img src="/images/image-20221002211431711.png" alt="image-20221002211431711.png" width="862" height="457">
-<img src="/images/image-20221002211431711.png" alt="image-20221002211431711.png" width="862" height="457">
+
 
 ### 数据字典
 
@@ -74,9 +74,9 @@ tags:
 
 一般说来，数据字典 应该由对下列4类元素的定义组成。
 ![07b12ccc809364f18257acb854ccffe4.png](/images/07b12ccc809364f18257acb854ccffe4.png)
-![07b12ccc809364f18257acb854ccffe4.png](/images/07b12ccc809364f18257acb854ccffe4.png)
+
 ![62f6cfcb0613dfba8ac0da325c0e01f2.png](/images/62f6cfcb0613dfba8ac0da325c0e01f2.png)
-![62f6cfcb0613dfba8ac0da325c0e01f2.png](/images/62f6cfcb0613dfba8ac0da325c0e01f2.png)
+
 =意思是等价于(或定义为)； 
 +意思是和(即连接两个分量)； 
 ［］意思是或(即从方括弧内列出的若干个分量中选择一个)，通常用“|” 号隔开供选择的分量； 
