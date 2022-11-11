@@ -1,1 +1,2 @@
-Example site modified from https://github.com/gohugoio/hugoBasicExample
+# 网站
+https://xherror.top/
