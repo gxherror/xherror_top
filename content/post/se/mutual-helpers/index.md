@@ -9,6 +9,7 @@ hidden: false
 comments: true
 categories:
  - SE
+ - ANDROID
 tags:
 ---
 # 第二次迭代
@@ -17,9 +18,37 @@ CS3331-1-软件工程大作业，参考《第一行代码 第三版》
 
 [主文件](https://github.com/gxherror/MutualHelpers/blob/main/app/src/main/java/top/xherror/mutualhelpers/MainActivity.kt) [APP](https://github.com/gxherror/MutualHelpers/blob/main/app/release/app-release.apk) [博客](https://xherror.top/post/se/mutual-helpers/)
 
+### 安卓前端
+
 <img src="/images/Screenshot_2022-12-19-11-33-17-450_top.xherror.mutualhelpers.png" alt="Screenshot_2022-12-19-11-33-17-450_top.xherror.mutualhelpers" style="zoom:25%;" /><img src="/images/Screenshot_2022-12-19-11-37-10-653_top.xherror.mutualhelpers.png" alt="Screenshot_2022-12-19-11-37-10-653_top.xherror.mutualhelpers" style="zoom:25%;" /><img src="/images/Screenshot_2022-12-19-11-33-24-689_top.xherror.mutualhelpers.png" alt="Screenshot_2022-12-19-11-33-24-689_top.xherror.mutualhelpers" style="zoom: 25%;" /><img src="/images/Screenshot_2022-12-19-11-39-25-374_top.xherror.mutualhelpers.png" alt="Screenshot_2022-12-19-11-39-25-374_top.xherror.mutualhelpers" style="zoom:25%;" />
 
+### 服务器后端
 
+```go
+func main() {
+	router := gin.Default()
+	router.GET("/update", handleUpdate)
+	router.GET("/items/:category", getItem)
+	router.GET("/items", getItems)
+
+	router.Static("/images", "./images")
+	router.Static("/avatars", "./avatars")
+
+	router.POST("/items", addItem)
+	router.POST("/images", addImage)
+	router.POST("/avatars", addAvatar)
+
+	router.DELETE("/items", deleteItem)
+	router.Run()
+	models.Close()
+}
+```
+
+![image-20221224124744769](/images/image-20221224124744769.png)
+
+### 数据库
+
+![image-20221224125045070](/images/image-20221224125045070.png)
 
 ## 整体设计
 
@@ -28,20 +57,22 @@ CS3331-1-软件工程大作业，参考《第一行代码 第三版》
   - UI采用NestedScrollView嵌套RecycleView实现滑动与列表实现
   - UI模仿柠檬的布局，白绿粉蓝配色
 - 数据库部分
-  - item的储存采用原生的关系数据库SQLite加ORM模型Room
+  - item的储存
+    - 前端采用原生的关系数据库SQLite加ORM模型Room作为缓存
+    - 后端采用mysql储存
   - person与其他metadata采用原生的KV数据库SharedPreferences
-  - 后序将person的储存也换成关系数据库方便进行DA
-  - 使用Gson实现储存的Json格式与运行时ArrayList转换
-- 网络部分(未完成)
+  - 后序将person的储存也换成关系数据库方便进行数据分析
+  - 使用Gson实现储存/网络传输的Json格式与运行时ArrayList转换
+- 网络部分(未彻底完成)
   - 三层架构，即client-server-database
-  - 使用Gin框架实现RESTFUL API，做为前端服务器
+  - 使用Gin框架实现RESTFUL API，做为后端服务器
   - 使用Glide实现远端图片的获取，图片的异步加载与本地缓存
 
 ## 特色
 
 - UI设计较为简单，更多重点在后端逻辑部分
 - 实现了留言功能，方便双方的交流
-- 动态类别修改，分类搜索，简单的模糊搜索(水壶->水杯)
+- 动态类别修改，分类搜索，简单的模糊搜索(水壶->水杯,计组->计算机组成原理与设计)
 - 密码采用SHA256加密储存，实现记住密码自动登入功能
 
 ## General Design
@@ -68,6 +99,7 @@ CS3331-1-软件工程大作业，参考《第一行代码 第三版》
 - encrypt password use SHA256 when storage, implement remember password and auto login in utility
 
 ## UML
+
 ### Class Diagram
 
 <img src="/images/image-20221219104125176.png" alt="image-20221219104125176"  />
@@ -78,9 +110,16 @@ CS3331-1-软件工程大作业，参考《第一行代码 第三版》
 
 ### Sequence Diagram
 
-![image-20221219111532535](/images/image-20221219111532535.png)
+![image-20221224122632176](/images/image-20221224122632176.png)
 
+![image-20221224122642710](/images/image-20221224122642710.png)
 
+## 感受
+
+- 由于安卓每次更新会修改大量的API,且内容繁多,导致原生安卓开发十分复杂
+- 使用UML建模能够让项目的结构更加明晰可见,也方便后续的修改/维护
+- 项目分析设计阶段是十分重要的,良好的前期设计为后续的开发提供了良好的指导,也减少了走弯路的时间
+- 项目测试阶段是一个不可以忽略的阶段,就算是小项目也需要良好的测试代码,本次开发就因为缺少了良好的测试代码导后续修改出现bug时没能及时发现,debug浪费了大量时间
 
 # 第一次迭代
 
@@ -124,7 +163,7 @@ init                 	--2022/10/5 20:01
 
 UI美观方面较差，基本逻辑处理正确，但图片上传存在不同步的BUG
 
-<img src="/images/e15aa0cf7a8f2f51acff761008739fa3.png" alt="e15aa0cf7a8f2f51acff761008739fa3.png" width="298" height="565" class="jop-noMdConv"> <img src="/images/2775b0c173315f4eaa0f48e4316442ea.png" alt="2775b0c173315f4eaa0f48e4316442ea.png" width="294" height="559" class="jop-noMdConv"><img src="/images/e2585e5d727cadb7dc34c3776c160e37.png" alt="e2585e5d727cadb7dc34c3776c160e37.png" width="289" height="551" class="jop-noMdConv">
+<img src="/images/e15aa0cf7a8f2f51acff761008739fa3.png" alt="e15aa0cf7a8f2f51acff761008739fa3.png" width="298" height="565" class="jop-noMdConv"> <img src="/images/2775b0c173315f4eaa0f48e4316442ea.png" alt="2775b0c173315f4eaa0f48e4316442ea.png" width="294" height="559" class="jop-noMdConv"><img src="../_resources/e2585e5d727cadb7dc34c3776c160e37.png" alt="e2585e5d727cadb7dc34c3776c160e37.png" width="289" height="551" class="jop-noMdConv">
 
 ## 事后总结
 
