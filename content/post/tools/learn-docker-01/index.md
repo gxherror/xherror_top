@@ -6,7 +6,6 @@ slug: learn-docker-01
 image: 
 categories:
     - TOOLS
-tags:
     - DOCKER
 ---
 [来源](https://yeasy.gitbook.io/docker_practice/)

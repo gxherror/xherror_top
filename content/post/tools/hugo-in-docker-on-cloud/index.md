@@ -6,8 +6,7 @@ slug: hugo-in-docker-on-cloud
 image: hugo-logo-wide.svg
 categories:
     - TOOLS
-tags:
-    - HUGO
+    - DOCKER
 ---
 ## 腾讯云配置
 * 选用轻量应用服务器，Docker基础镜像，Ubuntu20.04-Docker20
