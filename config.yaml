@@ -143,6 +143,7 @@ params:
         cusdis:
             host:
             id:
+    
     widgets:
         homepage:
             - type: search
@@ -182,6 +183,14 @@ params:
             enabled: true
         content:
             enabled: true
+
+    busuanzi:
+      enable: true
+      site_uv: true
+      site_pv: true
+      page_pv: true
+
+
 
 ### Custom menu
 ### See https://docs.stack.jimmycai.com/configuration/custom-menu.html

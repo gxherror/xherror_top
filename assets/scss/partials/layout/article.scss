@@ -29,6 +29,28 @@
             }
         }
 
+        .article-busuanzi{
+            padding: var(--card-padding);
+            padding-bottom: 0;
+
+            flex-direction: column;
+            justify-content: center;
+            padding: var(--card-padding);
+            gap: 15px;
+
+            align-items: center;
+            color: var(--card-text-color-tertiary);
+            gap: 15px;
+            flex-wrap: wrap;
+        
+            svg {
+                vertical-align: middle;
+                width: 20px;
+                height: 20px;
+                stroke-width: 1.33;
+            }
+        }
+
         .article-content {
             margin: var(--card-padding) 0;
             color: var(--card-text-color-main);

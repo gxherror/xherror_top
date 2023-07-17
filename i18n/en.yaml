@@ -33,6 +33,9 @@ article:
         one: "{{ .Count }} minute read"
         other: "{{ .Count }} minute read"
 
+    pageView:
+        other: "Page view: "  
+
 notFound:
     title:
         other: Not Found
@@ -71,3 +74,9 @@ footer:
 
     designedBy:
         other: Theme {{ .Theme }} designed by {{ .DesignedBy }}
+
+    pageView:
+        other: " Total page view: "
+
+    uniqueVisitor:
+        other: " Unique visitor: "

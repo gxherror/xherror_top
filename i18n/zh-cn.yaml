@@ -20,6 +20,9 @@ article:
     readingTime:
         other: "阅读时长: {{ .Count }} 分钟"
 
+    pageView:
+        other: " 阅读量: "
+
 notFound:
     title:
         other: 404 错误
@@ -58,3 +61,9 @@ footer:
 
     designedBy:
         other: 主题 {{ .Theme }} 由 {{ .DesignedBy }} 设计
+    
+    pageView:
+        other: " 总阅读量: "
+
+    uniqueVisitor:
+        other: " 访问人数: "

@@ -1,6 +1,6 @@
 <article class="{{ if .Params.image }}has-image {{ end }}main-article">
     {{ partial "article/components/header" . }}
-
+    {{- partial "widget/busuanzi" (dict "params" .Site.Params.busuanzi "bsz_type" "page-reading") -}}
     {{ partial "article/components/content" . }}
 
     {{ partial "article/components/footer" . }}

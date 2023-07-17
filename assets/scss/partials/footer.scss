@@ -27,6 +27,7 @@ footer.site-footer {
             color: var(--body-text-color);
         }
     }
+
     .recordation {
         color: var(--body-text-color);
         font-weight: normal;
@@ -34,6 +35,19 @@ footer.site-footer {
 
         a {
             color: var(--body-text-color);
+        }
+    }
+
+    .footer-busuanzi {
+        color: var(--body-text-color);
+        font-weight: normal;
+        font-size: 1.2rem;
+
+        svg {
+            vertical-align: middle;
+            width: 20px;
+            height: 20px;
+            stroke-width: 1.33;
         }
     }
 }
