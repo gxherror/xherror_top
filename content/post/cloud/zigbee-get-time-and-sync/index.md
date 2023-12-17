@@ -37,9 +37,9 @@ categories:
 
 ## IAR EW for 8051设置
 
-![image-20230511055814122](./../../_resources/image-20230511055814122.png)
+![image-20230511055814122](/images/image-20230511055814122.png)
 
-![image-20230511055852001](./../../_resources/image-20230511055852001.png)
+![image-20230511055852001](/images/image-20230511055852001.png)
 
 ## 初始化广播
 

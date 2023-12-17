@@ -210,6 +210,18 @@ menu:
           url: https://space.bilibili.com/36707116
           params:
               icon: brand-bilibili
+        
+        - identifier: dockerhub
+          name: dockerhub
+          url: https://hub.docker.com/u/xherror
+          params:
+              icon: brand-dockerhub
+
+        - identifier: leetcode
+          name: leetcode
+          url: https://leetcode.cn/u/xherror/
+          params:
+              icon: brand-leetcode     
 
 related:
     includeNewer: true
