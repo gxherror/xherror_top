@@ -1,5 +1,5 @@
 ---
-title: "Thingsboard编译与部署"
+title: "Thingsboard二次开发"
 description: 项目
 date: 2023-11-30T14:10:07Z
 image: 
@@ -61,6 +61,43 @@ $mvn clean install -DskipTests -Dlicense.skip=true #-Ddockerfile.skip=false
 
 ```
 
+### 换LOGO
+
+替换`ui-ngx/src/assets/logo_title_white.svg`文件
+
+### 换标题
+
+```ts
+// ui-ngx/src/environments/environment.ts
+export const environment = {
+  appTitle: 'Your_title',
+  production: false,
+// @ts-ignore
+  tbVersion: TB_VERSION,
+// @ts-ignore
+  supportedLangs: SUPPORTED_LANGS,
+  //! 设置为zh_CN会有问题
+  defaultLang: 'en_US'
+};
+
+// ui-ngx/src/index.html
+<head>
+  <meta charset="utf-8">
+  <title>Your_title</title>
+  <base href="/">
+  ...
+</head>
+  
+```
+
+### 侧边栏调整
+
+见另一篇文章
+
+
+
+
+
 ## 部署
 
 - 部署环境为centos7,**内存为8G(内存偏小导致后续出现很多问题QAQ)**
@@ -117,51 +154,20 @@ lrwxrwxrwx    1 root root    27 Nov 29 17:54 conf -> /usr/share/thingsboard/conf
 $sudo /usr/share/thingsboard/bin/install/install.sh --loadDemo
 $sudo service thingsboard start
 $sudo service thingsboard status
-Redirecting to /bin/systemctl status thingsboard.service
+Redirecting to /bin/systemctl status  -l thingsboard.service
 ● thingsboard.service - thingsboard
    Loaded: loaded (/usr/lib/systemd/system/thingsboard.service; enabled; vendor preset: disabled)
-   Active: active (running) since Thu 2023-11-30 14:54:51 CST; 6h ago
- Main PID: 10005 (thingsboard.jar)
-    Tasks: 210
+   Active: active (running) since Mon 2023-12-11 14:11:21 CST; 5 days ago
+ Main PID: 7314 (thingsboard.jar)
+    Tasks: 234
    Memory: 1.1G
-   
+   CGroup: /system.slice/thingsboard.service
+           ├─7314 /bin/bash /usr/share/thingsboard/bin/thingsboard.jar
+           └─7331 /usr/bin/java -Dsun.misc.URLClassPath.disableJarChecking=true -Dplatform=rpm -Dinstall.data_dir=/usr/share/thingsboard/data -Xlog:gc*,heap*,age*,safepoint=debug:file=/var/log/thingsboard/gc.log:time,uptime,level,tags:filecount=10,filesize=10M -XX:+IgnoreUnrecognizedVMOptions -XX:+HeapDumpOnOutOfMemoryError -XX:-UseBiasedLocking -XX:+UseTLAB -XX:+ResizeTLAB -XX:+PerfDisableSharedMem -XX:+UseCondCardMark -XX:+UseG1GC -XX:MaxGCPauseMillis=500 -XX:+UseStringDeduplication -XX:+ParallelRefProcEnabled -XX:MaxTenuringThreshold=10 -jar /usr/share/thingsboard/bin/thingsboard.jar
    
 # 之后可以通过8080访问
 ```
 
-## 更新
-
-```bash
-# 会保留配置文件
-# 解决Error processing condition on org.thingsboard.server.cache.TBRedisStandaloneConfiguration
-
-# for ubuntu $sudo dpkg -r thingsboard
-$sudo rpm -e thingsboard
-# for ubuntu $dpkg -l '*thingsboard*'
-$ rpm -qa |grep thing
-# for ubuntu $sudo dpkg -i thingsboard
-$ sudo rpm -ivh thingsboard.rpm 
-$ cat /usr/share/thingsboard/conf/thingsboard.conf
-# DB Configuration 
-...
-export DATABASE_TS_TYPE=sql
-export SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:54320/thingsboard
-export SPRING_DATASOURCE_USERNAME=postgres
-export SPRING_DATASOURCE_PASSWORD=postgres
-# Specify partitioning size for timestamp key-value storage. Allowed values: DAYS, MONTHS, YEARS, INDEFINITE.
-export SQL_POSTGRES_TS_KV_PARTITIONING=MONTHS
-# change JWT time 
-export JWT_TOKEN_EXPIRATION_TIME=604800
-
-$ cd ~
-$ sudo /usr/share/thingsboard/bin/install/install.sh
-Unexpected error during ThingsBoard installation!
-org.thingsboard.server.dao.exception.DataValidationException: User with email 'sysadmin@thingsboard.org'  already present in database!
-
-$ sudo service thingsboard start
-Redirecting to /bin/systemctl start thingsboard.service
-$ sudo service thingsboard status
-```
 
 #### 问题
 
@@ -380,6 +386,41 @@ https://github.com/thingsboard/thingsboard/issues/8279
 
 However, the VM might run out of memory to become so slow. So we see 503 Service Unavailable from Web UI again.
 
+
+## 更新
+
+```bash
+# 会保留配置文件
+# 解决Error processing condition on org.thingsboard.server.cache.TBRedisStandaloneConfiguration
+
+# for ubuntu $sudo dpkg -r thingsboard
+$sudo rpm -e thingsboard
+# for ubuntu $dpkg -l '*thingsboard*'
+$ rpm -qa |grep thing
+# for ubuntu $sudo dpkg -i thingsboard
+$ sudo rpm -ivh thingsboard.rpm 
+$ cat /usr/share/thingsboard/conf/thingsboard.conf
+# DB Configuration 
+...
+export DATABASE_TS_TYPE=sql
+export SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:54320/thingsboard
+export SPRING_DATASOURCE_USERNAME=postgres
+export SPRING_DATASOURCE_PASSWORD=postgres
+# Specify partitioning size for timestamp key-value storage. Allowed values: DAYS, MONTHS, YEARS, INDEFINITE.
+export SQL_POSTGRES_TS_KV_PARTITIONING=MONTHS
+# change JWT time 
+export JWT_TOKEN_EXPIRATION_TIME=604800
+
+$ cd ~
+$ sudo /usr/share/thingsboard/bin/install/install.sh
+Unexpected error during ThingsBoard installation!
+org.thingsboard.server.dao.exception.DataValidationException: User with email 'sysadmin@thingsboard.org'  already present in database!
+
+$ sudo service thingsboard start
+Redirecting to /bin/systemctl start thingsboard.service
+$ sudo service thingsboard status
+```
+
 ## 代理
 
 https://app.zerossl.com/dashboard
@@ -422,7 +463,7 @@ services:
 #nginx.conf
 server {
     listen 80;
-    server_name YOUR_IP;
+    server_name YOUR_IP YOUR_DOMAIN localhost;
     # 注意这里最后有/
     location /proxy/ {
         # 注意这里最后也有/
@@ -442,7 +483,7 @@ server {
 
 server {
     listen 443 ssl;
-    server_name YOUR_IP;
+    server_name YOUR_IP YOUR_DOMAIN localhost;
     #证书文件名称
     ssl_certificate cert/certificate.crt;
     #私钥文件名称
@@ -459,7 +500,6 @@ server {
         proxy_set_header X-Real-IP $remote_addr;
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     }
-
     location /update/  {
         proxy_pass http://172.17.0.1:4321/;
         proxy_set_header Host $proxy_host;
@@ -475,13 +515,32 @@ server {
 }
 ```
 
+### 问题
 
+```
+nginx: [warn] conflicting server name "localhost" on 0.0.0.0:80, ignored
+```
+
+```nginx
+http {
+    ...
+    #配置文件中包括一个defalut.conf,冲突了=.=,注释掉
+    #include /etc/nginx/conf.d/*.conf;
+    ...
+}
+```
+
+
+
+https://www.reddit.com/r/nginx/comments/6l51to/nginx_warn_conflicting_server_name_mydomaincom_on/
 
 ## 总结
 
 - 宝塔面板与Nginx Proxy Manager
 - 主域名 ghproxy.com 已喜提 GFW，已启用镜像站 [mirror.ghproxy.com](https://mirror.ghproxy.com/)
-- mvn真的好慢!!!!!!!!!
 
 https://thingsboard.io/docs/getting-started-guides/helloworld/
 
+http://www.yuhangwei.com/web/note/2021-07-28/68.html
+
+https://zhuanlan.zhihu.com/p/418978795

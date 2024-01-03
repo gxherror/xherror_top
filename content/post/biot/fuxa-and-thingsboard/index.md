@@ -13,10 +13,27 @@ tags:
 ---
 # tb与fuxa对接
 
+## 简介 
+
+ThingsBoard是一个基于Java的开源物联网平台，用于数据收集、处理、可视化和设备管理。与其他开源物联网平台相比，ThingsBoard有以下特点：
+
+1. 组件化规则引擎(rule engine)，通过自定义规则链来处理复杂事件
+2. 可自定义的部件(widget)与规则节点(rule node)，方便添加新功能
+3. 使用RPC（Remote Procedure Call，远程过程调用）控制设备，实现对建筑设备的控制
+4. 可扩展的IOT网关，对接多种IoT设备
+5. 多种部署架构，完整的开发文档，较成熟的生态环境
+   可自定义的部件与规则节点方便设备管理系统的搭建，IOT网关与RPC方便对设备的统一管理，因此项目选用ThingsBoard来简化开发流程，减低开发复杂度。
+
+[FUXA](https://github.com/frangoteam/FUXA)是基于Web的开源组态软件，可快速构建和部署可扩展的SCADA、HMI或IoT系统，可用于项目中SCADA系统的搭建。
+
+利用iframe将FUXA嵌入tb来实现简单的集成, 并使用adapter来完成JSON格式转化,身份验证等工作
+
 ## tb
 
-- 其中`HOST:PORT`为fuxa地址
+- 其中`hostname:port`为fuxa地址
 - 需要配置HTTPS,不然会报错,配置见fuxa部分
+
+### 自定义widget实现
 
 ```html
 <!DOCTYPE html>
@@ -57,27 +74,135 @@ self.onInit = function() {
 
 ```
 
-## adapter
+### 修改源码实现
 
-1. 实现tb的JSON格式到FUXA的JSON格式的转换
+新建module,并编写逻辑
 
-2. 定时获取JWT Token
+```bash
+$cd ui-ngx/src/app/modules/home/pages/
+# {name} 这里是fuxa
+$ng g module {name} --routing
+$ng g c {name}
+```
 
-3. 对RPC API添加JWT
+会生成如图所示的文件结构,在componemt写逻辑
 
-4. 管理不同用户的json
+![image-20231219215229592](/images/image-20231219215229592.png)
 
-```go
-func main() {
-	 r := gin.Default()
-	 go getJWTTokenPeriodly()
-	 r.POST("/adapter/userinfo",UserInfoHandler)
-	 r.GET("/adapter/api/plugins/telemetry/DEVICE/*deviceID", ProxyTelemetry)
-	 r.POST("/adapter/project", ProjectPostHandler)
-	 r.POST("/adapter/api/plugins/rpc/*suffix", ProxyRpc)
-	 log.Fatal(r.Run(":8082"))
+```ts
+//fuxa-routing.module.ts
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { FuxaComponent } from './fuxa.component';
+
+const routes: Routes = [
+  {
+    path: "fuxa",
+    component: FuxaComponent,
+  },
+];
+
+@NgModule({
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule]
+})
+export class FuxaRoutingModule { }
+```
+
+```ts
+//fuxa.component.ts
+import { Component } from '@angular/core';
+import {getCurrentAuthUser } from '@app/core/public-api';
+import { Store } from '@ngrx/store';
+import { AppState } from '@core/core.state';
+@Component({
+  selector: 'tb-fuxa',
+  templateUrl: './fuxa.component.html',
+  styleUrls: ['./fuxa.component.scss']
+})
+export class FuxaComponent {
+  constructor(private store: Store<AppState>) {
+}
+  // 在module加载时起作用
+  ngOnInit() {
+    const data = JSON.stringify({
+      //! userId的获取方法
+      userId: getCurrentAuthUser(this.store).userId,
+      jwt_token: localStorage.getItem('jwt_token'), 
+      refresh_token: localStorage.getItem('refresh_token') 
+    });
+    const httpRequest = new XMLHttpRequest();
+    httpRequest.open('POST', 'https://hostname:port/adapter/userinfo', true);
+    httpRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    httpRequest.send(data);
+    httpRequest.onreadystatechange = () => { 
+      if (httpRequest.readyState === XMLHttpRequest.DONE && httpRequest.status === 200) {
+        const json = httpRequest.responseText;
+        const forwardRequest = new XMLHttpRequest();
+        forwardRequest.open('POST', `https://hostname:port/api/project?userId=${getCurrentAuthUser(this.store).userId}`, true);
+        forwardRequest.setRequestHeader("Content-Type", "application/json");
+        forwardRequest.send(json);
+      }
+    };
+  }
 }
 ```
+
+```ts
+//fuxa.module.ts
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
+import { FuxaRoutingModule } from './fuxa-routing.module';
+import { FuxaComponent } from './fuxa.component';
+
+
+@NgModule({
+  declarations: [
+    FuxaComponent
+  ],
+  imports: [
+    CommonModule,
+    FuxaRoutingModule
+  ]
+})
+export class FuxaModule { }
+```
+
+修改menu显示的内容,注意不同角色对应的函数不同,有需要的话需要修改对应的函数
+
+```ts
+// ui-ngx/src/app/core/services/menu.service.ts
+private buildSysAdminMenu(): Array<MenuSection> {
+    const sections: Array<MenuSection> = [];
+    sections.push(
+      {
+        id: 'home',
+        name: 'home.home',
+        type: 'link',
+        path: '/home',
+        icon: 'home'
+      },
+
+      // 新建菜单FUXA begin
+      {
+        id: 'fuxa',
+        name: 'fuxa',
+        type: 'link',
+        path: '/fuxa',
+        icon: 'mdi:layers-edit'
+      },
+      // 新建菜单FUXA end
+      ....
+    }
+}
+```
+
+最终实现的效果
+
+![image-20231219214656271](/images/image-20231219214656271.png)
+
+http://www.yuhangwei.com/web/note/2021-07-28/68.html
 
 ## fuxa
 
@@ -180,11 +305,33 @@ module.exports = {
 
 添加自签证书到chrome,解决`NET::ERR_CERT_AUTHORITY_INVALID`
 
-![Screenshot 2023-12-17 011252](/images/Screenshot 2023-12-17 011252.png)
+![Screenshot 2023-12-17 011252](/images/Screenshot-2023-12-17-011252.png)
 
 ### wsl问题
 
 可以使用vscode简单实现wsl到win的端口映射,但一定一定要`***\**\*netstat -aon|findstr "{port}"`
+
+## adapter
+
+1. 实现tb的JSON格式到FUXA的JSON格式的转换
+
+2. 定时获取JWT Token
+
+3. 对RPC API添加JWT
+
+4. 管理不同用户的json
+
+```go
+func main() {
+	 r := gin.Default()
+	 go getJWTTokenPeriodly()
+	 r.POST("/adapter/userinfo",UserInfoHandler)
+	 r.GET("/adapter/api/plugins/telemetry/DEVICE/*deviceID", ProxyTelemetry)
+	 r.POST("/adapter/project", ProjectPostHandler)
+	 r.POST("/adapter/api/plugins/rpc/*suffix", ProxyRpc)
+	 log.Fatal(r.Run(":8082"))
+}
+```
 
 # fuxa与设备对接
 
@@ -341,48 +488,5 @@ func ProxyRpc(c *gin.Context) {
 
 ```
 
-### 设备设置
-
-https://thingsboard.io/docs/reference/http-api/#client-side-rpc
-
-```go
-//删除了err != nil 的判定
-type RPCSetStatusRequest struct {
-    Method string      `json:"method"`
-    Params SetStatusParams  `json:"params"`
-}
-
-type SetStatusParams struct {
-    Value int `json:"value"`
-}
-
-func RPCMessageHandler(client mqtt.Client, msg mqtt.Message) {
-    //接收RPC over MQTT
-	fmt.Printf("Received RPC request on topic: %s\nMessage: %s\n", msg.Topic(), string(msg.Payload()))
-    //topicParts := strings.Split(msg.Topic(), "/")
-    //requestID := topicParts[len(topicParts)-1] 
-
-	//RPC解析与处理
-	var req RPCSetStatusRequest
-	if err := json.Unmarshal(msg.Payload(), &req); err != nil {
-		fmt.Println(err.Error())
-    }
-	fmt.Printf("Method: %s\n", req.Method)
-    fmt.Printf("Params: %d, Value: %d\n", req.Params, req.Params.Value)
-	switch req.Method {
-	case "setStatus":
-		status =req.Params.Value
-	}
-	//发送MQTT
-    // responseData := fmt.Sprintf("Responding to request ID %s", requestID)
-    // responseTopic := fmt.Sprintf("v1/devices/me/rpc/response/%s", requestID)
-    // if token := client.Publish(responseTopic, 0, false, responseData); token.Wait() && token.Error() != nil {
-    //     fmt.Println("Error publishing RPC response:", token.Error())
-    // } else {
-    //     fmt.Printf("RPC response published to topic: %s\n", responseTopic)
-    // }
-}
-```
-
-
+### 
 https://lab.nulla.top/ba-logo
